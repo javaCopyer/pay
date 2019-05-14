@@ -1,0 +1,4 @@
+#环境切换 dev test prod 
+spring:
+  profiles:
+    active: dev

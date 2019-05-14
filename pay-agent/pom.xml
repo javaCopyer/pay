@@ -1,0 +1,92 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>com.minghui</groupId>
+    <artifactId>pay</artifactId>
+    <version>1.0.1-SNAPSHOT</version>
+  </parent>
+  <artifactId>pay-agent</artifactId>
+  <dependencies>
+  
+  	<dependency>
+  		<groupId>com.minghui</groupId>
+	    <artifactId>pay-common</artifactId>
+	     <version>0.0.1-SNAPSHOT</version>
+  	</dependency>
+  	
+  	<dependency>
+  		<groupId>com.minghui</groupId>
+	    <artifactId>pay-service</artifactId>
+	     <version>0.0.1-SNAPSHOT</version>
+  	</dependency>
+  	
+  	<dependency>
+  		<groupId>com.minghui</groupId>
+	    <artifactId>pay-dao</artifactId>
+	     <version>0.0.1-SNAPSHOT</version>
+  	</dependency>
+  </dependencies>
+  
+  
+  <build>
+  	 <resources>
+		<resource>
+			<!--项目的默认资源目录，但是要排除不必要的文件，想要指定加入的再下面的resource指定 -->
+			<directory>${project.basedir}/src/main/resources</directory>
+			<excludes>
+				<exclude>*.yml</exclude>
+				<exclude>properties/*</exclude>
+			</excludes>
+		</resource>
+		<resource>
+			<directory>${project.basedir}/src/main/java</directory>
+			<includes>
+				<include>*.*</include>
+				<include>**/*.xml</include>
+				<include>**/*.properties</include>
+			</includes>
+			<!--是否替换资源中的属性 -->
+			<filtering>false</filtering>
+		</resource>
+	</resources>
+  
+  
+		<plugins>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+				<configuration>
+                    <!-- 指定该Main Class为全局的唯一入口 -->
+                    <mainClass>com.minghui.pay.agent.MainApplication</mainClass>
+                    <!-- Main-Class为PropertiesLauncher，
+                    	 会加载fatjar中的BOOT-INF/classes和BOOT-INF/lib，加载内部classes和lib，
+                    	 同时还提供了通过配置系统变量从外部加载classes和lib的能力
+                    	 而jar只能加载fatjar中的classes和lib
+                    	 通过设置ZIP以此来达到jar包瘦身的目的 -->
+                    <layout>ZIP</layout>
+                    <includes>
+                    	<include>
+                    		<groupId>com.minghui</groupId>
+						    <artifactId>pay-common</artifactId>
+                    	</include>
+                    	<include>
+                    		<groupId>com.minghui</groupId>
+	   						<artifactId>pay-service</artifactId>
+                    	</include>
+                    	<include>
+                    		<groupId>com.minghui</groupId>
+	 					   <artifactId>pay-dao</artifactId>
+                    	</include>
+                    </includes>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>repackage</goal><!--可以把依赖的包都打包到生成的Jar包中-->
+                        </goals>
+                    </execution>
+                </executions>
+			</plugin>
+		</plugins>
+	</build>
+</project>

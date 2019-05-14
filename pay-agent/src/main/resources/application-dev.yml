@@ -1,0 +1,71 @@
+#redis配置
+spring:
+ #jdbc配置
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://127.0.0.1:3306/pay
+    username: root
+    password: admin
+    #springboot 去除此配置，加上此配置会抛出string无法转换为DruidDataSource的异常
+    #type: com.alibaba.druid.pool.DruidDataSource
+    druid:
+     # 启用加密，配置公钥
+     #connection-properties: config.decrypt=true;config.decrypt.key=MFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBAKv/ozHIwUmoWOUPK/ZUjEGT47ouUAOM/RjfWPftivGWxGQGmzPvLvxP6HyKxdMQpF5KA/sFVzLqb2eaE+Y8oc0CAwEAAQ==
+     initial-size: 5
+     #最小连接池数量
+     min-idle: 5
+     #最大连接池数量 maxIdle已经不再使用
+     max-active: 500
+     #获取连接时最大等待时间，单位毫秒
+     max-wait: 20000
+     #申请连接的时候检测，如果空闲时间大于timeBetweenEvictionRunsMillis，执行validationQuery检测连接是否有效。
+     test-while-idle: true
+     #有两个含义：1) Destroy线程会检测连接的间隔时间  2) testWhileIdle的判断依据，详细看testWhileIdle属性的说明
+     time-between-eviction-runs-millis: 60000
+     #Destory线程中如果检测到当前连接的最后活跃时间和当前时间的差值大于 minEvictableIdleTimeMillis，则关闭当前连接
+     min-evictable-idle-time-millis: 8000
+     #用来检测连接是否有效的sql 必须是一个查询语句
+     #mysql中为 select 'x'
+     #oracle中为 select 1 from dual
+     validation-query: select 'x'
+     #申请连接时会执行validationQuery检测连接是否有效,开启会降低性能,默认为true
+     test-on-borrow: false
+     #归还连接时会执行validationQuery检测连接是否有效,开启会降低性能,默认为true
+     test-on-return: false
+     #是否缓存preparedStatement,mysql5.5+建议开启
+     #spring.datasource.druid.pool-prepared-statements=true
+     #当值大于0时poolPreparedStatements会自动修改为true
+     #要启用PSCache，必须配置大于0，当大于0时，poolPreparedStatements自动触发修改为true。在Druid中，不会存在Oracle下PSCache占用内存过多的问题，可以把这个数值配置大一些，比如说100
+     max-pool-prepared-statement-per-connection-size: 200
+     #配置扩展插件
+    filters: config,stat,log4j
+    #合并多个DruidDataSource的监控数据
+    use-global-data-source-stat: true
+    web-stat-filter:
+        # 是否开启 WebStatFilter 默认是true
+        enabled: true
+        # 需要拦截的url
+        url-pattern: /*
+        # 排除静态资源的请求
+        exclusions: "*.js,*.gif,*.jpg,*.png,*.css,*.ico,/druid/*"
+    stat-view-servlet:
+        #是否启用StatViewServlet 默认值true
+        enabled: true
+        # 需要拦截的url
+        url-pattern: /druid/*
+        # 允许清空统计数据
+        reset-enable: true
+        login-username: druid
+        login-password: druid
+
+  redis:
+    host: 127.0.0.1
+    port: 6379
+    password: 123456
+    timeout: 10000
+    lettuce:
+      pool:
+        max-active: -1
+        max-wait: -1
+        max-idle: 5
+        min-idle: 0
